@@ -1,9 +1,9 @@
 # storewebsite
 
 Login:
-  Employees: usr300x
-  Data Analyst: usr200x
-  Manager: usr100x
+  Employees: user300x
+  Data Analyst: user200x
+  Manager: user100x
 
 Password:
   3000
