@@ -11,7 +11,7 @@
 <body>
 
 <!-- you can use forms to pass information between webpages -->
-<form action="welcome.php" method="post"> <!-- The form goes to this page after you hit submit -->
+<form action="temp.php" method="post"> <!-- The form goes to this page after you hit submit -->
   <div class="imgcontainer">
 	<img src="img_avatar2.png" alt="Avatar" class="avatar">
   </div>

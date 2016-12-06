@@ -10,8 +10,14 @@
 <?php
 	session_start();
 	
-	$user = $_POST["user_name"];
-	$psw = $_POST["user_psw"];
+	if(!isset($_SESSION["user_name"]) || !isset($_SESSION["user_psw"]) )
+	{
+		header( 'Location: login.php' ) ;
+		exit();
+	}
+	
+	$user = $_SESSION["user_name"];
+	$psw = $_SESSION["user_psw"];
 	
 	if($user == 'user1000'  && $psw == '1000')
 	{
@@ -29,6 +35,7 @@
 	else
 	{
 		header( 'Location: login.php?login=failed' ) ;
+		exit();
 	}
 ?>
 
