@@ -21,7 +21,7 @@
 	{
 		echo "You are a data analyst";
 	}
-	elseif(strpos($user, 'user300') !== false  && $psw == '3000')
+	elseif(strpos($user, 'user3') !== false  && $psw == '3000')
 	{
 		$_SESSION['userId'] = substr($user, 4) - 3000;
 		header( 'Location: employee.php') ;
