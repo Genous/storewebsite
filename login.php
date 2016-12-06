@@ -18,10 +18,10 @@
 
   <div class="container"> <!-- put stuff in div's to control their style; loop in the style.css file and see syntax for container-->
 	<label><b>Username</b></label>
-	<input type="text" placeholder="Enter Username" name="uname" required>
+	<input type="text" placeholder="Enter Username" name="user_name" required>
 
 	<label><b>Password</b></label>
-	<input type="password" placeholder="Enter Password" name="psw" required>
+	<input type="password" placeholder="Enter Password" name="user_psw" required>
 
 	<button type="submit">Login</button>
 	<?php

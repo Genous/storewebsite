@@ -3,41 +3,33 @@
 <html>
 
 <head>
-<title>PHP Test</title>
+<title>Welcome To A-Apparel</title>
 </head>
 
 <body>
 <?php
 	session_start();
 	
+	$user = $_POST["user_name"];
+	$psw = $_POST["user_psw"];
 	
-	$user = $_POST["uname"];
-	$psw = $_POST["psw"];
-	$userId = substr($user, 7);
-	
-	if(strpos($user, 'user100') !== false  && $psw == '1000')
+	if($user == 'user1000'  && $psw == '1000')
 	{
 		echo "You are a manager!";
-		$_SESSION['userId'] = $userId;
 	}
-	elseif(strpos($user, 'user200') !== false  && $psw == '2000')
+	elseif($user == 'user2000' && $psw == '2000')
 	{
 		echo "You are a data analyst";
-		$_SESSION['userId'] = $userId;
 	}
 	elseif(strpos($user, 'user300') !== false  && $psw == '3000')
 	{
-		echo "You are an employee";
-		$_SESSION['userId'] = $userId;
+		$_SESSION['userId'] = substr($user, 4) - 3000;
 		header( 'Location: employee.php') ;
-		
 	}
 	else
 	{
-		echo "Wrong info";
 		header( 'Location: login.php?login=failed' ) ;
 	}
-
 ?>
 
 
