@@ -18,7 +18,7 @@
         exit();
     }
     
-    echo " <div class =\"welcomemsg\"> <h1> Date Analyst </h1> </div>";
+    echo " <div class =\"welcomemsg\"> <h1> Data Analyst </h1> </div>";
 	echo "<button class=\"logout\" onclick=\"location.href = 'logout.php';\" id=\"myButton\" class=\"float-left submit-button\" >Logout</button> </div>";
     	
 	echo "<table> <tr>";
@@ -79,9 +79,27 @@
 
 			</form>
     	</td>";
+    	
+    	
+	echo "<td> <button class=\"option\" onclick=\"location.href = 'sales_analyst.php?query=4';\" id=\"quer4\" class=\"float-left submit-button\" >Get Monthly Sales Comparision</button> </div> </td>";
 	
+    echo "<td>
+		<form action=\"sales_analyst.php\" method=\"get\">
+
+			<input type=\"hidden\" name=\"query\" value=\"5\">
+			
+			<label><b>Start Date</b></label>
+			<input type=\"text\" placeholder=\"Enter Start Date\" name=\"q5_start_date\" required>
+
+			<label><b>End Date</b></label>
+			<input type=\"text\" placeholder=\"Enter End Date\" name=\"q5_end_date\" required>		
+
+			<button class=\"option\" type=\"submit\">Get Total Marginal Profit</button>
+
+		</form>
+	</td>";
 	
-	
+	echo "<td> <button class=\"option\" onclick=\"location.href = 'sales_analyst.php?query=6';\" id=\"quer6\" class=\"float-left submit-button\" >Get Size Comparision</button> </div> </td>";
 	
 	echo "</tr> </table>";
 	
@@ -93,6 +111,7 @@
         $password = 'd4taBas3r', // password - dont change
         $connection_string = '//oracle.cise.ufl.edu/orcl'); // database URL - dont change
 		$statement = oci_parse($connection, 'select r1.itemID, r1.rescnt - p1.purcnt as stock from (select itemID, count(*) as purcnt from PURCHASEEVENT group by itemID) p1, (select itemID, sum(amountrestocked) + 100 as rescnt from RESTOCKEVENT group by ItemID) r1 where r1.itemID = p1.itemID order by itemID');
+
 		oci_execute($statement);	
 	
 		echo "<div class=\"tableContainer\">";
@@ -171,6 +190,111 @@
 		{
 		        echo "<div class=\"row\"> <tr> <td>";
 		        echo $row[0]." </td><td> ".$row[1]." </td><td> ".$row[2]." </td><td> ".$row[3]." </td><td> ".$row[4]." </td></tr></div>";
+		}
+		echo "</table> </div>";
+		oci_free_statement($statement); // dont change
+		oci_close($connection); // dont change
+    }
+    elseif(isset($_GET["query"]) && $_GET["query"] == 4)
+    {
+    	$connection = oci_connect($username = 'kjessup', // username - dont change
+		$password = 'd4taBas3r', // password - dont change
+		$connection_string = '//oracle.cise.ufl.edu/orcl'); // database URL - dont change
+		$statement =  oci_parse($connection, "select to_char(purchaseDate, 'mm-yyyy') month, count(*) from
+(select pur.purchaseID, pur.employeeID, pur.itemID, pur.purchaseDate, ite.department 
+from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID) 
+group by to_char(purchaseDate, 'mm-yyyy') order by 
+CAST(SUBSTR(to_char(purchaseDate, 'mm-yyyy'), 4, 4) AS INT), CAST(SUBSTR(to_char(purchaseDate, 'mm-yyyy'), 1, 2) AS INT)");	
+		
+		oci_execute($statement);
+		echo "<div class=\"tableContainer\">";
+		echo "<table>";
+		echo  "<div class=\"rowHeader\">
+		   <tr>
+			    <th>Month </th>
+			    <th>Total Sales %</th>
+		  </tr> </div>";
+		while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
+		{
+		        echo "<div class=\"row\"> <tr> <td>";
+		        echo $row[0]." </td><td> ".$row[1]." </td></tr></div>";
+		}
+		echo "</table> </div>";
+		oci_free_statement($statement); // dont change
+		oci_close($connection); // dont change
+    }  
+    
+    
+    
+    
+    elseif(isset($_GET["query"]) && isset($_GET["q5_start_date"]) && isset($_GET["q5_end_date"]) && $_GET["query"] == 5)
+    {
+    	$connection = oci_connect($username = 'kjessup', // username - dont change
+		$password = 'd4taBas3r', // password - dont change
+		$connection_string = '//oracle.cise.ufl.edu/orcl'); // database URL - dont change
+		$statement =  oci_parse($connection, "select itemID, sum(marginal) as totalmarginal from (select it.itemID, pur.price - it.wholesalecost as marginal from ITEM it, PURCHASEEVENT pur 
+where it.itemid = pur.itemid and purchaseDate between to_date(:startDate) and to_date(:endDate)) group by itemID order by itemID");
+		
+		oci_bind_by_name($statement, ":startDate", $_GET["q5_start_date"]);
+		oci_bind_by_name($statement, ":endDate", $_GET["q5_end_date"]);
+		
+		oci_execute($statement);
+		echo "<div class=\"tableContainer\">";
+		echo "<table>";
+		echo  "<div class=\"rowHeader\">
+		   <tr>
+			    <th>Item ID</th>
+			    <th>Marginal Profit</th> 
+		  </tr> </div>";
+		while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
+		{
+		        echo "<div class=\"row\"> <tr> <td>";
+		        echo $row[0]." </td><td> ".$row[1]." </td></tr></div>";
+		}
+		echo "</table> </div>";
+		oci_free_statement($statement); // dont change
+		oci_close($connection); // dont change
+    }
+    
+    
+    
+    elseif(isset($_GET["query"]) && $_GET["query"] == 6)
+    {
+    	$connection = oci_connect($username = 'kjessup', // username - dont change
+		$password = 'd4taBas3r', // password - dont change
+		$connection_string = '//oracle.cise.ufl.edu/orcl'); // database URL - dont change
+		$statement =  oci_parse($connection, "select department, trunc(SMALL*100/(SMALL+MEDIUM+LARGE+XL+XXL),2) as SMALLPERCENT, trunc(MEDIUM*100/(SMALL+MEDIUM+LARGE+XL+XXL),2) as MEDIUMPERCENT, trunc(LARGE*100/(SMALL+MEDIUM+LARGE+XL+XXL),2) as LARGEPERCENT, trunc(XL*100/(SMALL+MEDIUM+LARGE+XL+XXL),2) as XLPERCENT, trunc(XXL*100/(SMALL+MEDIUM+LARGE+XL+XXL),2) as XXLPERCENT from
+(select department, count(*) as SMALL from (select pur.purchaseID, pur.employeeID, pur.itemID, pur.purchaseDate, ite.itemSize, ite.department 
+from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID and ite.itemSize = 'SMALL') group by department)
+natural join
+(select department, count(*) as MEDIUM from (select pur.purchaseID, pur.employeeID, pur.itemID, pur.purchaseDate, ite.itemSize, ite.department 
+from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID and ite.itemSize = 'MEDIUM') group by department)
+natural join
+(select department, count(*) as LARGE from (select pur.purchaseID, pur.employeeID, pur.itemID, pur.purchaseDate, ite.itemSize, ite.department 
+from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID and ite.itemSize = 'LARGE') group by department)
+natural join
+(select department, count(*) as XL from (select pur.purchaseID, pur.employeeID, pur.itemID, pur.purchaseDate, ite.itemSize, ite.department 
+from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID and ite.itemSize = 'XL') group by department)
+natural join
+(select department, count(*) as XXL from (select pur.purchaseID, pur.employeeID, pur.itemID, pur.purchaseDate, ite.itemSize, ite.department 
+from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID and ite.itemSize = 'XXL') group by department)");
+		
+		oci_execute($statement);
+		echo "<div class=\"tableContainer\">";
+		echo "<table>";
+		echo  "<div class=\"rowHeader\">
+		   <tr>
+			    <th>Department</th>
+			    <th>Small %</th>
+			    <th>Medium %</th> 
+			    <th>Large %</th> 
+			    <th>XL %</th>
+			    <th>XXL %</th>
+		  </tr> </div>";
+		while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
+		{
+		        echo "<div class=\"row\"> <tr> <td>";
+		        echo $row[0]." </td><td> ".$row[1]." </td><td> ".$row[2]." </td><td> ".$row[3]." </td><td> ".$row[4]." </td><td> ".$row[5]." </td></tr></div>";
 		}
 		echo "</table> </div>";
 		oci_free_statement($statement); // dont change
