@@ -3,6 +3,16 @@ body {
 	/* http://zellox.com/wp-content/uploads/2016/05/website-backgrounds-%E2%80%AB1%E2%80%AC-%E2%80%AB%E2%80%AC-1920x1080.jpg*/
 }
 
+h1 {
+	 color: #333333;
+	 font-family: 'Bitter', serif; font-size: 50px;
+	 font-weight: normal;
+	 line-height: 54px;
+	 text-align: center;
+	 color: #ffffff;
+	 margin: 0 0 54px;
+ }
+
  /* Bordered form */
 form {
 	margin: auto;
@@ -53,4 +63,42 @@ img.avatar {
 /* Add padding to containers */
 .container {
     padding: 16px;
+}
+
+.tableContainer {
+  margin: 0 auto;
+  padding: 40px;
+  max-width: 800px;
+}
+
+.welcomemsg
+{
+	margin: auto;
+	background: #4CAF50;
+}
+
+table {
+  margin: 0 0 40px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+}
+
+tr {
+  display: table-row;
+  background: #f6f6f6;
+}
+tr:nth-of-type(odd) {
+  background: #e9e9e9;
+}
+
+th {
+  font-weight: 900;
+  color: #ffffff;
+  background: #4CAF50;
+}
+
+td {
+  padding: 6px 12px;
+  display: table-cell;
 }
