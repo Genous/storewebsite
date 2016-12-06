@@ -31,7 +31,7 @@
 	{
 		    echo $row[1]." ".$row[2]."";
 	}
-	echo "<button onclick=\"location.href = 'logout.php';\" id=\"myButton\" class=\"float-left submit-button\" >Logout</button>
+	echo "<button class=\"logout\" onclick=\"location.href = 'logout.php';\" id=\"myButton\" class=\"float-left submit-button\" >Logout</button>
 	</h1> </div>";
 	
 	$statement = oci_parse($connection, 'SELECT EI.itemID, EI.itemType, EI.itemSize, EI.wholeSaleCost, NS.cnt FROM (select IT.itemID, IT.itemType, IT.itemSize, IT.wholeSaleCost FROM ITEM IT, EMPLOYEE EMP WHERE EMP.EMPLOYEEID = :x AND EMP.DEPARTMENT = IT.DEPARTMENT) EI, (select itemID, count(itemID) as cnt from PURCHASEEVENT WHERE employeeID = :x GROUP BY itemID ORDER BY itemID) NS where EI.itemID = NS.itemID');

@@ -23,7 +23,7 @@
 	<label><b>Password</b></label>
 	<input type="password" placeholder="Enter Password" name="user_psw" required>
 
-	<button type="submit">Login</button>
+	<button class="login" type="submit">Login</button>
 	<?php
 		if($_GET["login"] == "failed")
 		{
