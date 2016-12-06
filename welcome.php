@@ -8,31 +8,29 @@
 
 <body>
 <?php
-	$user = $_POST["uname"];
+	session_start();
 	
-	if($user == "manager")
+	
+	$user = $_POST["uname"];
+	$psw = $_POST["psw"];
+	$userId = substr($user, 7);
+	
+	if(strpos($user, 'user100') !== false  && $psw == '1000')
 	{
 		echo "You are a manager!";
-		$connection = oci_connect($username = 'kjessup',
-                          $password = 'd4taBas3r',
-                          $connection_string = '//oracle.cise.ufl.edu/orcl');
-		$statement = oci_parse($connection, 'SELECT * FROM EMPLOYEE WHERE EMPLOYEEID = 45');
-		oci_execute($statement);
-		while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
-		{
-				echo $row[0]. " ".$row[1]. " ".$row[2]." ".$row[3]." ".$row[4]." ".$row[5]."<br>"; // print out the full tuple, add newline
-		}
-
-		oci_free_statement($statement); // dont change
-		oci_close($connection); // dont change
+		$_SESSION['userId'] = $userId;
 	}
-	elseif($user == "customer")
+	elseif(strpos($user, 'user200') !== false  && $psw == '2000')
 	{
-		echo "You are a customer";
+		echo "You are a data analyst";
+		$_SESSION['userId'] = $userId;
 	}
-	elseif($user == "employee")
+	elseif(strpos($user, 'user300') !== false  && $psw == '3000')
 	{
 		echo "You are an employee";
+		$_SESSION['userId'] = $userId;
+		header( 'Location: employee.php') ;
+		
 	}
 	else
 	{
