@@ -16,14 +16,12 @@
 		    echo $row[1]." ".$row[2]."<br>";
 	}
 
-//        oci_free_statement($statement); // dont change
-//        oci_close($connection); // dont change
+	$statement = oci_parse($connection, 'select IT.itemID, IT.itemType, IT.itemSize, IT.wholeSaleCost FROM ITEM IT, EMPLOYEE EMP WHERE EMP.EMPLOYEEID = :x AND EMP.DEPARTMENT = IT.DEPARTMENT');
 
-	$statement = oci_parse($connection, 'SELECT IT.itemID, IT.itemType, IT.itemSize, IT.wholeSaleCost FROM ITEM IT, EMPLOYEE EMP WHERE EMP.EMPLOYEEID = :x AND EMP.DEPTARTMENT = IT.DEPARTMENT');
 	oci_bind_by_name($statement, ':x', $x);
 	oci_execute($statement);
 	
-	echo "you sell: ";
+	echo "you sell:<br>";
 
         while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
         {
