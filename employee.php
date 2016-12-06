@@ -5,7 +5,7 @@
 	
 	if(!isset($_SESSION["user_name"]) || !isset($_SESSION["user_psw"]) || !isset($_SESSION["userId"]))
 	{
-		header( 'Location: login.php' ) ;
+		header('Location: login.php') ;
 		exit();
 	}
 	
