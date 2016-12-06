@@ -26,6 +26,7 @@
 	elseif($user == 'user2000' && $psw == '2000')
 	{
 		header('Location: sales_analyst.php');
+		exit();
 	}
 	elseif(strpos($user, 'user3') !== false  && $psw == '3000')
 	{

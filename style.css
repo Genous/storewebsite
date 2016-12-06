@@ -53,6 +53,15 @@ Button.logout {
     cursor: pointer;
 }
 
+Button.option {
+	background-color: #1E90FF;
+    color: white;
+    padding: 10px 17px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
 /* Extra style for the cancel button (red) */
 .cancelbtn {
     width: auto;
@@ -78,19 +87,21 @@ img.avatar {
 }
 
 .tableContainer {
-  margin: 0 auto;
-  padding: 40px;
-  max-width: 800px;
+  padding: 70px 0px;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
 }
 
 .welcomemsg
 {
 	margin: auto;
+	height: 60px;
 	background: #4CAF50;
 }
 
 table {
-  margin: 0 0 40px 0;
+  margin: auto;
   width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   display: table;
