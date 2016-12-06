@@ -25,7 +25,7 @@
 	}
 	elseif($user == 'user2000' && $psw == '2000')
 	{
-		echo "You are a data analyst";
+		header('Location: sales_analyst.php');
 	}
 	elseif(strpos($user, 'user3') !== false  && $psw == '3000')
 	{
