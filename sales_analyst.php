@@ -71,7 +71,7 @@
         echo  "<div class=\"rowHeader\">
                    <tr>
                 <th>Item ID</th>
-                <th>Stock</th> 
+                <th>Purchase Rate</th> 
                   </tr> </div>";
 
         while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
