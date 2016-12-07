@@ -11,7 +11,6 @@
 
 <?php
 	session_start();
-
 	if(!isset($_SESSION["user_name"]) || !isset($_SESSION["user_psw"]))
 	{
 		header('Location: login.php') ;
@@ -28,12 +27,10 @@
     
     echo "<td>
     		<form action=\"sales_analyst.php\" method=\"get\">
-
 				<input type=\"hidden\" name=\"query\" value=\"2\">
 				
 				<label><b>Start Date</b></label>
 				<input type=\"text\" placeholder=\"Enter Start Date\" name=\"q2_start_date\" required>
-
 				<label><b>End Date</b></label>
 				<input type=\"text\" placeholder=\"Enter End Date\" name=\"q2_end_date\" required>
 				
@@ -43,21 +40,16 @@
 					<option value=\"BOYS\"> Boys </option>
 					<option value=\"GIRLS\"> Girls </option>
 				</select>			
-
 				<button class=\"option\" type=\"submit\">Get Daily Items Sell Rate</button>
-
 			</form>
     	</td>";
 	
-
 	    echo "<td>
     		<form action=\"sales_analyst.php\" method=\"get\">
-
 				<input type=\"hidden\" name=\"query\" value=\"3\">
 				
 				<label><b>Start Date</b></label>
 				<input type=\"text\" placeholder=\"Enter Start Date\" name=\"q3_start_date\" required>
-
 				<label><b>End Date</b></label>
 				<input type=\"text\" placeholder=\"Enter End Date\" name=\"q3_end_date\" required>
 				
@@ -67,7 +59,6 @@
 					<option value=\"BOYS\"> Boys </option>
 					<option value=\"GIRLS\"> Girls </option>
 				</select>
-
 				<select name=\"q3_rate\">
 					<option value=\"1\"> Daily </option>
 					<option value=\"7\"> Weekly </option>
@@ -76,7 +67,6 @@
 				</select>
 				
 				<button class=\"option\" type=\"submit\">Get Employee Sell Rate</button>
-
 			</form>
     	</td>";
     	
@@ -85,25 +75,21 @@
 	
     echo "<td>
 		<form action=\"sales_analyst.php\" method=\"get\">
-
 			<input type=\"hidden\" name=\"query\" value=\"5\">
 			
 			<label><b>Start Date</b></label>
 			<input type=\"text\" placeholder=\"Enter Start Date\" name=\"q5_start_date\" required>
-
 			<label><b>End Date</b></label>
 			<input type=\"text\" placeholder=\"Enter End Date\" name=\"q5_end_date\" required>		
-
 			<button class=\"option\" type=\"submit\">Get Total Marginal Profit</button>
-
 		</form>
 	</td>";
 	
 	echo "<td> <button class=\"option\" onclick=\"location.href = 'sales_analyst.php?query=6';\" id=\"quer6\" class=\"float-left submit-button\" >Get Size Comparision</button> </div> </td>";
 	
-	echo "</tr> </table>";
-	
-	
+    echo "<td> <button class=\"option\" onclick=\"location.href = 'sales_analyst.php?query=7';\" id=\"quer7\" class=\"float-left submit-button\" >Total Tuple Count</button> </div> </td>";
+
+	echo "</tr></table>";
 	
 	if(isset($_GET["query"]) && $_GET["query"] == 1)
 	{
@@ -111,7 +97,6 @@
         $password = 'd4taBas3r', // password - dont change
         $connection_string = '//oracle.cise.ufl.edu/orcl'); // database URL - dont change
 		$statement = oci_parse($connection, 'select r1.itemID, r1.rescnt - p1.purcnt as stock from (select itemID, count(*) as purcnt from PURCHASEEVENT group by itemID) p1, (select itemID, sum(amountrestocked) + 100 as rescnt from RESTOCKEVENT group by ItemID) r1 where r1.itemID = p1.itemID order by itemID');
-
 		oci_execute($statement);	
 	
 		echo "<div class=\"tableContainer\">";
@@ -300,7 +285,33 @@ from PURCHASEEVENT pur, ITEM ite where pur.itemID = ite.itemID and ite.itemSize 
 		oci_free_statement($statement); // dont change
 		oci_close($connection); // dont change
     }
-    
+    elseif(isset($_GET["query"]) && $_GET["query"] == 7)
+    {
+        $connection = oci_connect($username = 'kjessup', // username - dont change
+                $password = 'd4taBas3r', // password - dont change
+                $connection_string = '//oracle.cise.ufl.edu/orcl'); // database URL - dont change
+                $statement =  oci_parse($connection, "select c1 as itemno, c2 as empno, c3 as purno, c4 as resno, c1+c2+c3+c4 as tot from (select count(*) as c1 from ITEM),(select count(*) as c2 from EMPLOYEE),(select count(*) as c3 from PURCHASEEVENT),(select count(*) as c4 from RESTOCKEVENT)");
+
+                oci_execute($statement);
+                echo "<div class=\"tableContainer\">";
+                echo "<table>";
+                echo  "<div class=\"rowHeader\">
+                   <tr>
+                            <th>Item </th>
+                            <th>Employee </th>
+			    <th>PurchaseEvent </th>
+			    <th>RestockEvent </th>
+			    <th>Total Tuple Count </th>
+                  </tr> </div>";
+                while (($row = oci_fetch_array($statement, OCI_BOTH)) != false)
+                {
+                        echo "<div class=\"row\"> <tr> <td>";
+                        echo $row[0]." </td><td> ".$row[1]." </td><td>  ".$row[2]." </td><td> ".$row[3]." </td><td> ".$row[4]." </td></tr></div>";
+                }
+                echo "</table> </div>";
+                oci_free_statement($statement); // dont change
+                oci_close($connection); // dont change
+    } 
 ?>
 </body>
 </html>
